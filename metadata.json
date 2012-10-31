@@ -1,5 +1,5 @@
 {
-  "name": "solr",
+  "name": "tomcat-solr",
   "description": "Installs tomcat 7 and deploys Solr 4.0.0 on it",
   "long_description": "",
   "maintainer": "Matheus Ashton",
