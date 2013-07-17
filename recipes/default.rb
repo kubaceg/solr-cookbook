@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 case node[:platform]
 when "debian", "ubuntu"
     package "tomcat7" do
@@ -68,11 +69,39 @@ when "debian", "ubuntu"
         mode "0644"
     end
 
-    cookbook_file "/var/lib/tomcat7/webapps/solr.war" do
-        source "solr.war"
-        owner "root"
-        group "root"
-        mode "0644"
-        #      notifies :restart, resources(:service => "tomcat7") 
+    #download solr
+    remote_file "/tmp/solr.tgz" do
+      source "http://ftp.ps.pl/pub/apache/lucene/solr/#{node[:solr][:solr_version]}/solr-#{node[:solr][:solr_version]}.tgz"
+      mode 00644
     end
+
+    #unpack solr package
+    bash 'Unpack solr' do
+      cwd '/tmp'
+      code <<-EOH
+        tar -xzf solr.tgz
+        cp solr-#{node[:solr][:solr_version]}/dist/solr-#{node[:solr][:solr_version]}.war /var/lib/tomcat7/webapps/solr.war
+        EOH
+      not_if { ::File.exists?('/var/lib/tomcat7/webapps/solr.war') }
+    end
+
+    #copy needed jars
+    bash 'Copy solr libs' do
+      cwd '/tmp'
+      code <<-EOH
+        cp solr-#{node[:solr][:solr_version]}/example/lib/ext/* /usr/share/tomcat7/lib/
+        EOH
+    end
+
+    #cleaning
+    bash 'Clean solr files' do
+      cwd '/tmp'
+      code <<-EOH
+        rm solr.tgz
+        rm -rf solr-#{node[:solr][:solr_version]}
+        EOH
+    end
+
+    execute '/etc/init.d/tomcat7 restart'
+
 end
