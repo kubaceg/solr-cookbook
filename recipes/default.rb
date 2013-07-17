@@ -69,6 +69,13 @@ when "debian", "ubuntu"
         mode "0644"
     end
 
+    template "/etc/tomcat7/server.xml" do
+        source "server.xml.erb"
+        owner "root"
+        group "root"
+        mode "0644"
+    end
+
     #download solr
     remote_file "/tmp/solr.tgz" do
       source "http://ftp.ps.pl/pub/apache/lucene/solr/#{node[:solr][:solr_version]}/solr-#{node[:solr][:solr_version]}.tgz"
