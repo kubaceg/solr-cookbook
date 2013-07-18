@@ -92,12 +92,13 @@ when "debian", "ubuntu"
       not_if { ::File.exists?('/var/lib/tomcat7/webapps/solr.war') }
     end
 
-    #copy needed jars
+    #copy needed jars and files
     bash 'Copy solr libs' do
       cwd '/tmp'
       code <<-EOH
         cp solr-#{node[:solr][:solr_version]}/example/lib/ext/* /usr/share/tomcat7/lib/
-        EOH
+        cp solr-#{node[:solr][:solr_version]}/example/resources/* /usr/share/tomcat7/lib/
+        EOH    
     end
 
     #cleaning
