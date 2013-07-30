@@ -12,7 +12,7 @@ Debian, Ubuntu (OpenJDK, Oracle)
 Attributes
 ==========
 
-node['solr']['port'] - The port used by Solr server (Tomcat 7 HTTP connector). Default: 8893.    
+node['solr']['port'] - The port used by Solr server (Tomcat 7 HTTP connector). Default: 8090.    
 node['solr']['home'] - Directory that will hold Solr configuration and data storage. Default: /opt/solr     
 node['solr']['data_dir'] - Directory to hold indexes data. Default: solr_home/data.     
 node['solr']['core_name'] - Name of the running Solr core
