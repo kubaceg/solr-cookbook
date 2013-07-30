@@ -98,7 +98,7 @@ when "debian", "ubuntu"
       code <<-EOH
         cp solr-#{node[:solr][:solr_version]}/example/lib/ext/* /usr/share/tomcat7/lib/
         cp solr-#{node[:solr][:solr_version]}/example/resources/* /usr/share/tomcat7/lib/
-        EOH    
+        EOH
     end
 
     #cleaning
