@@ -78,7 +78,7 @@ when "debian", "ubuntu"
 
     #download solr
     remote_file "/tmp/solr.tgz" do
-      source "http://ftp.ps.pl/pub/apache/lucene/solr/#{node[:solr][:solr_version]}/solr-#{node[:solr][:solr_version]}.tgz"
+      source "http://archive.apache.org/dist/lucene/solr/#{node[:solr][:solr_version]}/solr-#{node[:solr][:solr_version]}.tgz"
       mode 00644
     end
 
