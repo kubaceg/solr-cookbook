@@ -1,0 +1,6 @@
+.level = <%= node[:solr][:log_level]%>
+
+com.gwtstore.level=ALL
+com.appgravity.level=ALL
+org.apache.solr.core.level=<%= node[:solr][:log_level]%>
+org.apache.solr.update.processor.level=<%= node[:solr][:log_level]%>

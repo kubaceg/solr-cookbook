@@ -78,38 +78,67 @@ when "debian", "ubuntu"
 
     #download solr
     remote_file "/tmp/solr.tgz" do
-      source "http://ftp.ps.pl/pub/apache/lucene/solr/#{node[:solr][:solr_version]}/solr-#{node[:solr][:solr_version]}.tgz"
+      source "http://archive.apache.org/dist/lucene/solr/#{node[:solr][:solr_version]}/solr-#{node[:solr][:solr_version]}.tgz"
       mode 00644
     end
 
     #unpack solr package
     bash 'Unpack solr' do
       cwd '/tmp'
-      code <<-EOH
+      code <<-EOF
         tar -xzf solr.tgz
         cp solr-#{node[:solr][:solr_version]}/dist/solr-#{node[:solr][:solr_version]}.war /var/lib/tomcat7/webapps/solr.war
-        EOH
+        EOF
       not_if { ::File.exists?('/var/lib/tomcat7/webapps/solr.war') }
     end
 
     #copy needed jars and files
     bash 'Copy solr libs' do
       cwd '/tmp'
-      code <<-EOH
+      code <<-EOF
         cp solr-#{node[:solr][:solr_version]}/example/lib/ext/* /usr/share/tomcat7/lib/
         cp solr-#{node[:solr][:solr_version]}/example/resources/* /usr/share/tomcat7/lib/
-        EOH    
+        EOF
+    end
+
+    #install cors filter
+    if node[:cors][:install]
+        include_recipe 'solr-cookbook::cors'
     end
 
     #cleaning
     bash 'Clean solr files' do
       cwd '/tmp'
-      code <<-EOH
+      code <<-EOF
         rm solr.tgz
         rm -rf solr-#{node[:solr][:solr_version]}
-        EOH
+        EOF
     end
 
     execute '/etc/init.d/tomcat7 restart'
+
+    #configure solr logging
+    directory "/var/lib/tomcat7/webapps/solr/WEB-INF/classes" do
+      owner "root"
+      group "root"
+      mode "0644"
+      action :create
+    end
+
+    template "/var/lib/tomcat7/webapps/solr/WEB-INF/classes/log4j.properties" do
+        source "log4j.properties.erb"
+        owner "root"
+        group "root"
+        mode "0644"
+    end
+
+    template "/var/lib/tomcat7/webapps/solr/WEB-INF/classes/logging.properties" do
+        source "logging.properties.erb"
+        owner "root"
+        group "root"
+        mode "0644"
+    end
+
+    execute '/etc/init.d/tomcat7 restart'    
 
 end

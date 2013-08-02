@@ -1,0 +1,6 @@
+g4j.rootLogger=<%= node[:solr][:log_level]%>, console
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.conversionPattern=%5p [%t] (%F:%L) - %m%n
+org.apache.solr.core=<%= node[:solr][:log_level]%>
+org.apache.solr.update.processor=<%= node[:solr][:log_level]%>
