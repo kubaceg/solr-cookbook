@@ -139,6 +139,6 @@ when "debian", "ubuntu"
         mode "0644"
     end
 
-    execute '/etc/init.d/tomcat7 restart'    
+    execute '/etc/init.d/tomcat7 restart'
 
 end
