@@ -23,6 +23,11 @@ when "debian", "ubuntu"
         action :install
     end
 
+    # create user tomcat
+    user "tomcat" do
+        action :create
+    end
+
     # configuring tomcat
     template "/var/lib/tomcat7/conf/Catalina/localhost/solr.xml" do
         source "tomcat_solr.xml.erb"
