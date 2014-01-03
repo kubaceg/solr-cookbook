@@ -88,27 +88,20 @@ when "debian", "ubuntu"
     end
 
     #unpack solr package
-    bash 'Unpack solr' do
+    bash 'Unpack solr and copy needed libs' do
       cwd '/tmp'
       code <<-EOF
         tar -xzf solr.tgz
         cp solr-#{node[:solr][:solr_version]}/dist/solr-#{node[:solr][:solr_version]}.war /var/lib/tomcat7/webapps/solr.war
+        cp solr-#{node[:solr][:solr_version]}/example/lib/ext/* /usr/share/tomcat7/lib/
+        cp solr-#{node[:solr][:solr_version]}/example/resources/* /usr/share/tomcat7/lib/
         EOF
       not_if { ::File.exists?('/var/lib/tomcat7/webapps/solr.war') }
     end
 
-    #copy needed jars and files
-    bash 'Copy solr libs' do
-      cwd '/tmp'
-      code <<-EOF
-        cp solr-#{node[:solr][:solr_version]}/example/lib/ext/* /usr/share/tomcat7/lib/
-        cp solr-#{node[:solr][:solr_version]}/example/resources/* /usr/share/tomcat7/lib/
-        EOF
-    end
-
     #install cors filter
     if node[:cors][:install]
-        include_recipe 'solr-cookbook::cors'
+        # include_recipe 'solr-cookbook::cors'
     end
 
     #cleaning
