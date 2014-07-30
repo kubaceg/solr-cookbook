@@ -101,7 +101,7 @@ when "debian", "ubuntu"
 
     #install cors filter
     if node[:cors][:install]
-        # include_recipe 'solr-cookbook::cors'
+        include_recipe 'solr-cookbook::cors'
     end
 
     #cleaning
